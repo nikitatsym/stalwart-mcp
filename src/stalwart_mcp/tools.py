@@ -78,7 +78,7 @@ def stalwart_version():
     from importlib.metadata import version
 
     try:
-        _get_client().get("/healthz")
+        _get_client().get_text("/healthz")
         service = {"status": "ok"}
     except Exception:
         service = {"status": "error"}
@@ -100,6 +100,11 @@ def list_principals(
     if page is not None:
         params["page"] = page
     result = _get_client().get("/api/principal", params=params)
+    if isinstance(result, dict) and "data" in result:
+        data = result["data"]
+        if isinstance(data, dict) and "items" in data:
+            data["items"] = _slim_list(data["items"], _SLIM_PRINCIPAL)
+        return result
     if isinstance(result, list):
         return _slim_list(result, _SLIM_PRINCIPAL)
     return _ok(result)
