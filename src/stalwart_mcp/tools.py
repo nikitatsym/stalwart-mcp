@@ -78,7 +78,7 @@ def stalwart_version():
     from importlib.metadata import version
 
     try:
-        _get_client().get_text("/healthz")
+        _get_client().get_text("/health/live")
         service = {"status": "ok"}
     except Exception:
         service = {"status": "error"}
