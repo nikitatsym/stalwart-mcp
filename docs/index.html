@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stalwart MCP — Setup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #0f172a; color: #e2e8f0;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .card {
+    background: #1e293b; border-radius: 12px; padding: 2rem;
+    max-width: 580px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,.4);
+  }
+  h1 { font-size: 1.5rem; margin-bottom: .25rem; }
+  .subtitle { color: #94a3b8; margin-bottom: 1.5rem; font-size: .9rem; }
+  label { display: block; font-size: .85rem; color: #94a3b8; margin-bottom: .3rem; margin-top: 1rem; }
+  input:not([type="checkbox"]) {
+    width: 100%; padding: .6rem .75rem; border: 1px solid #334155; border-radius: 6px;
+    background: #0f172a; color: #e2e8f0; font-size: .95rem; outline: none;
+  }
+  input:not([type="checkbox"]):focus { border-color: #3b82f6; }
+  .btn {
+    display: inline-block; margin-top: 1rem; padding: .65rem 1.5rem;
+    background: #3b82f6; color: #fff; border: none; border-radius: 6px;
+    font-size: .95rem; cursor: pointer; font-weight: 500; width: 100%; text-align: center;
+  }
+  .btn:hover { background: #2563eb; }
+  .btn-copy { background: #059669; }
+  .btn-copy:hover { background: #047857; }
+  .btn-outline {
+    background: transparent; border: 1px solid #475569; color: #94a3b8;
+  }
+  .btn-outline:hover { background: #1e293b; border-color: #64748b; color: #e2e8f0; }
+  pre {
+    background: #0f172a; border: 1px solid #334155; border-radius: 6px;
+    padding: 1rem; overflow-x: auto; font-size: .82rem; line-height: 1.5;
+    white-space: pre; color: #a5f3fc; margin-top: 1rem; max-height: 420px; overflow-y: auto;
+  }
+  .step { color: #94a3b8; font-size: .85rem; margin-bottom: .5rem; }
+  .step a { color: #60a5fa; text-decoration: none; }
+  .step a:hover { text-decoration: underline; }
+  .note { color: #94a3b8; font-size: .8rem; margin-top: 1rem; line-height: 1.4; }
+  .hidden { display: none; }
+  .copied { background: #047857; border-color: #047857; color: #fff; }
+  .gh-link {
+    display: inline-flex; align-items: center; gap: .4rem;
+    color: #94a3b8; font-size: .8rem; text-decoration: none; margin-top: 1.2rem;
+  }
+  .gh-link:hover { color: #e2e8f0; }
+  .gh-link svg { width: 16px; height: 16px; fill: currentColor; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Stalwart MCP</h1>
+  <p class="subtitle">Manage your Stalwart mail server from Claude, Cursor, or any MCP client — principals, queues, settings, spam filters, and more.</p>
+
+  <p class="step">1. Get your API key from Stalwart web admin &rarr; Settings &rarr; API Keys</p>
+  <p class="step">2. Enter your server URL and API key below:</p>
+
+  <label for="serverUrl">Server URL</label>
+  <input id="serverUrl" type="url" placeholder="https://mail.example.com" oninput="refreshConfig()">
+
+  <label for="apiKey">API Key</label>
+  <input id="apiKey" type="password" placeholder="Paste your Stalwart API key" autocomplete="off" oninput="refreshConfig()">
+
+  <pre id="configJson"></pre>
+
+  <button class="btn btn-outline" id="copyBtn" onclick="copyConfig()">Copy to clipboard</button>
+
+  <p class="note">Paste into: <strong>Claude Desktop</strong> &mdash; <code style="color:#a5f3fc">claude_desktop_config.json</code> &bull; <strong>Cursor</strong> &mdash; <code style="color:#a5f3fc">.cursor/mcp.json</code> &bull; <strong>Claude Code</strong> &mdash; <code style="color:#a5f3fc">.claude/settings.json</code> or <code style="color:#a5f3fc">claude mcp add</code>. Global config (macOS): <code style="color:#a5f3fc">~/.claude.json</code> &rarr; <code style="color:#a5f3fc">"mcpServers"</code>.</p>
+
+  <a class="gh-link" href="https://github.com/nikitatsym/stalwart-mcp" target="_blank" rel="noopener">
+    <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    GitHub
+  </a>
+</div>
+
+<script>
+const INDEX_URL = 'https://nikitatsym.github.io/stalwart-mcp/simple';
+
+function refreshConfig() {
+  const url = document.getElementById('serverUrl').value.trim() || 'https://mail.example.com';
+  const apiKey = document.getElementById('apiKey').value.trim() || 'YOUR_API_KEY';
+
+  const config = {
+    mcpServers: {
+      stalwart: {
+        command: 'uvx',
+        args: ['--refresh', '--extra-index-url', INDEX_URL, 'stalwart-mcp'],
+        env: {
+          STALWART_URL: url,
+          STALWART_TOKEN: apiKey,
+        },
+      },
+    },
+  };
+
+  document.getElementById('configJson').textContent = JSON.stringify(config, null, 2);
+
+  const copyBtn = document.getElementById('copyBtn');
+  if (apiKey !== 'YOUR_API_KEY') {
+    copyBtn.classList.remove('btn-outline');
+    copyBtn.classList.add('btn-copy');
+  } else {
+    copyBtn.classList.add('btn-outline');
+    copyBtn.classList.remove('btn-copy');
+  }
+}
+
+function copyConfig() {
+  const text = document.getElementById('configJson').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy to clipboard';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+refreshConfig();
+</script>
+
+</body>
+</html>
