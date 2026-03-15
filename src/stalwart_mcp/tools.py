@@ -386,7 +386,7 @@ def reschedule_message(id: int):
 @_op(stalwart_write)
 def update_settings(settings: list):
     """Update settings. settings: array of operations. Types:
-    - Insert: {"type": "insert", "values": [["key", "value"], ...], "assertEmpty": false}
+    - Insert: {"type": "insert", "prefix": null, "values": [["key", "value"], ...], "assert_empty": false}
     - Delete: {"type": "delete", "keys": ["key1", "key2"]}
     - Clear:  {"type": "clear", "prefix": "some.prefix."}
     """
