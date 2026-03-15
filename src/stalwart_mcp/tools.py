@@ -385,7 +385,11 @@ def reschedule_message(id: int):
 
 @_op(stalwart_write)
 def update_settings(settings: list):
-    """Update settings. settings: array of {type, prefix, ...} objects."""
+    """Update settings. settings: array of operations. Types:
+    - Insert: {"type": "insert", "values": [["key", "value"], ...], "assertEmpty": false}
+    - Delete: {"type": "delete", "keys": ["key1", "key2"]}
+    - Clear:  {"type": "clear", "prefix": "some.prefix."}
+    """
     return _ok(_get_client().post("/api/settings", json=settings))
 
 
