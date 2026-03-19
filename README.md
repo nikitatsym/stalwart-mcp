@@ -4,12 +4,6 @@ MCP server for [Stalwart](https://stalw.art/) mail server.
 
 ## Install
 
-```
-uvx --extra-index-url https://nikitatsym.github.io/stalwart-mcp/simple stalwart-mcp
-```
-
-## Configure
-
 ```json
 {
   "mcpServers": {
